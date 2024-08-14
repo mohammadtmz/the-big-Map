@@ -1,10 +1,7 @@
 # the-big-Map
-/ (Root of the repository)
-│
+
+
 ├── README.md                       # Overview of the repository, your skills, and objectives.
-├── LICENSE                         # License file for your code/projects.
-├── CONTRIBUTING.md                 # Guidelines for contributing to your repository (optional).
-├── .gitignore                      # Git ignore file to exclude unnecessary files.
 │
 ├── 01_Foundations/                 # Basics and foundational knowledge.
 │   ├── 01_Linux/                   # Linux fundamentals.

@@ -1,0 +1,74 @@
+name: Create Repositories and Structure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_repos:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2
+
+    - name: Create Repositories and Structure
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Define repository names
+        repos=("Foundation" "Cloud" "DevOps" "Data_Science" "Projects" "Resources")
+
+        # Loop through the array to create repositories and set up structure
+        for repo in "${repos[@]}"; do
+          echo "Creating repository: $repo"
+          curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user/repos -d "{\"name\":\"$repo\", \"private\":false}"
+          
+          echo "Cloning $repo repository"
+          git clone https://github.com/${{ github.repository_owner }}/$repo.git
+          
+          cd $repo
+          
+          # Create folders and files based on the section
+          case $repo in
+            Foundation)
+              mkdir -p 01_Linux/{Tutorials,Cheat_Sheets}
+              mkdir -p 02_Networking/{Tutorials,Tools}
+              mkdir -p 03_Scripting/{Bash_Scripts,Python_Scripts,Tutorials}
+              mkdir -p 04_Git_and_Version_Control/{Tutorials,Tools}
+              mkdir -p 05_Mathematics_and_Statistics/Tutorials
+              ;;
+            Cloud)
+              mkdir -p 01_AWS/{Services/{EC2,S3,IAM},Terraform_Scripts,Tutorials}
+              mkdir -p 02_Azure/{Services/{VM,Storage,Azure_AD},Terraform_Scripts,Tutorials}
+              mkdir -p 03_GCP/{Services/{Compute_Engine,Cloud_Storage,IAM},Terraform_Scripts,Tutorials}
+              ;;
+            DevOps)
+              mkdir -p 01_CI_CD/{Jenkins/{Pipeline_Examples,Jenkinsfile},GitLab_CI/{Pipeline_Examples,.gitlab-ci.yml},GitHub_Actions/{Workflow_Examples,action.yml},Tutorials}
+              mkdir -p 02_Infrastructure_as_Code/{Terraform/{AWS_Terraform,Azure_Terraform,GCP_Terraform,Modules},Ansible/{Playbooks,Roles/{Web_Server,DB_Server},Inventories/{dev,prod}},Tutorials}
+              mkdir -p 03_Containerization/{Docker/{Dockerfiles,Compose_Files,Tutorials,Cheat_Sheets},Kubernetes/{Manifests,Helm_Charts,Tutorials,Cheat_Sheets},Tutorials}
+              mkdir -p 04_Monitoring_and_Logging/{Prometheus_Grafana/{Prometheus_Config,Grafana_Dashboards,Tutorials},ELK_Stack/{Elasticsearch_Config,Logstash_Config,Kibana_Dashboards,Tutorials},Tutorials}
+              ;;
+            Data_Science)
+              mkdir -p 01_Python_for_Data_Science/{Pandas/{Tutorials},NumPy/{Tutorials},Matplotlib_Seaborn/{Tutorials},Scikit_Learn/{Tutorials}}
+              mkdir -p 02_Data_Processing/{ETL_Pipelines,Data_Cleaning,Big_Data/{Tutorials}}
+              mkdir -p 03_Machine_Learning/{Supervised_Learning/{Tutorials},Unsupervised_Learning/{Tutorials},Deep_Learning/{TensorFlow,Tutorials,PyTorch/Tutorials},Tutorials}
+              mkdir -p 04_DevOps_for_Data_Science/{MLOps/{Tutorials},Data_Versioning/{Tutorials},Model_Deployment/{Tutorials},Monitoring/{Tutorials}}
+              mkdir -p 05_Data_Science_Projects/{01_Project_Name/{Data,Notebooks,Models,Reports},02_Project_Name/{Data,Notebooks,Models,Reports}}
+              ;;
+            Projects)
+              mkdir -p 01_Project_Name/{Terraform,Ansible,Docker_Kubernetes}
+              mkdir -p 02_Project_Name/{Terraform,Ansible,Docker_Kubernetes}
+              ;;
+            Resources)
+              mkdir -p Books Courses
+              ;;
+          esac
+          
+          # Commit the folder structure
+          git add .
+          git commit -m "Initial commit: Create folder structure for $repo"
+          git push
+          
+          cd ..
+        done

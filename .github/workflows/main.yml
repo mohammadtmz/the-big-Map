@@ -12,6 +12,11 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v2
 
+    - name: Set up Git identity
+      run: |
+        git config --global user.email "m.tamizi90@gmail.com"
+        git config --global user.name "mohammadtmz"
+
     - name: Create Repositories and Structure
       env:
         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}

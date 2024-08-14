@@ -78,15 +78,13 @@ jobs:
               ;;
           esac
           
-          # Verify directory creation
-          if [ "$(ls -A .)" ]; then
-            echo "Directory structure created successfully"
-            git add .
-            git commit -m "Initial commit: Create folder structure for $repo"
-            git push
-          else
-            echo "Failed to create directory structure for $repo"
-          fi
+          # Add .gitkeep to each directory to ensure they're tracked by Git
+          find . -type d -exec touch {}/.gitkeep \;
+
+          # Commit the folder structure
+          git add .
+          git commit -m "Initial commit: Create folder structure for $repo"
+          git push
           
           cd ..
         done

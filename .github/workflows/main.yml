@@ -41,6 +41,7 @@ jobs:
           
           cd $repo
           
+          echo "Creating folder structure for $repo"
           # Create folders and files based on the section
           case $repo in
             Foundation)
@@ -77,10 +78,15 @@ jobs:
               ;;
           esac
           
-          # Commit the folder structure
-          git add .
-          git commit -m "Initial commit: Create folder structure for $repo"
-          git push
+          # Verify directory creation
+          if [ "$(ls -A .)" ]; then
+            echo "Directory structure created successfully"
+            git add .
+            git commit -m "Initial commit: Create folder structure for $repo"
+            git push
+          else
+            echo "Failed to create directory structure for $repo"
+          fi
           
           cd ..
         done

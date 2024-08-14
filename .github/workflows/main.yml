@@ -14,7 +14,7 @@ jobs:
 
     - name: Create Repositories and Structure
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
         # Define repository names
         repos=("Foundation" "Cloud" "DevOps" "Data_Science" "Projects" "Resources")
@@ -22,7 +22,7 @@ jobs:
         # Loop through the array to create repositories and set up structure
         for repo in "${repos[@]}"; do
           echo "Creating repository: $repo"
-          curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user/repos -d "{\"name\":\"$repo\", \"private\":false}"
+          curl -H "Authorization: token $PAT_TOKEN" https://api.github.com/user/repos -d "{\"name\":\"$repo\", \"private\":false}"
           
           echo "Cloning $repo repository"
           git clone https://github.com/${{ github.repository_owner }}/$repo.git
